@@ -4,6 +4,7 @@ import asyncio
 import requests
 import streamlit as st
 from typing import List, Dict, Union, Optional
+from datetime import datetime
 
 from pydantic import BaseModel
 from agents import (
@@ -224,10 +225,12 @@ async def process_message(user_input):
     tools = [search_searxng]
     guardrails = [politics_guardrail] if enable_guardrail else []
     
+    current_datetime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
     assistant_agent = Agent(
         name="Assistant",
         instructions=(
-            "You are a helpful and informative assistant. "
+            f"You are a helpful and informative assistant. Today's date and time is {current_datetime}. "
             "If you need current information, facts you don't know, "
             "or details about recent events, use the 'search_searxng' tool. "
             "Clearly state when you are searching and summarize the findings "
@@ -239,6 +242,7 @@ async def process_message(user_input):
         tools=tools,
         input_guardrails=guardrails,
     )
+
     
     # Prepare input for the agent, including history
     current_input = st.session_state.chat_history + [{"role": "user", "content": user_input}]

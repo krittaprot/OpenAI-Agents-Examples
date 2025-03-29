@@ -2,3 +2,4 @@ openai-agents
 markdown
 streamlit
 python-dotenv
+mcp
